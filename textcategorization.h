@@ -20,6 +20,7 @@ class Feature{
 	public:
 		commom::Func f;
 		DictClassfy dict;
+		std::map<std::string, int>hashmap;
 	public:
 		bool Init();
 		Feature();

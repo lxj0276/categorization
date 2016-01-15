@@ -26,6 +26,7 @@ namespace classfy{
 				else if( vec.size() == 2 )	p[vec.at(0)] = atof(vec.at(1).c_str());
 				else 	p[vec.at(0)] = 1;
 			}
+			commom::DEBUG_INFO(f.ConvertToStr(p.size()));
 			worddict.push_back(p);
 			fclose(fi);	 
 		}
@@ -57,6 +58,7 @@ namespace classfy{
 		score[6] /=2.5;
 		int maxindex = f.MaxArray(score,typenum) + 1;
 		int maxscore = score[maxindex-1];
+		//std::cout<<maxindex<<"  "<<maxscore<<"   "<<value<<"  "<<std::endl;
 		if(maxindex == 7){
 			score[maxindex-1] = 0;
 			int secondindex = f.MaxArray(score,typenum) + 1;
@@ -71,10 +73,21 @@ namespace classfy{
 
 	Feature::Feature(){
 		Init();
+		//TODO
+		for(int i = 0; i< dict.worddict.size(); i++){
+			for(std::map<std::string, float>::iterator it = dict.worddict.at(i).begin(); it!= dict.worddict.at(i).end(); it++){
+				hashmap[it->first]++;
+			}
+		}
+		int k = 0;
+		for(std::map<std::string, int>::iterator it = hashmap.begin(); it != hashmap.end(); it++){
+			hashmap[it->first] = k++;
+		}
 	}
 	Feature::~Feature(){}
 	bool Feature::Init(){		
 		dict.LoadDict(25,"./dict/classfication/wordlist/");
+		//commom::DEBUG_INFO(f.ConvertToStr(dict.worddict.size()));
 		return true;
 	}
 	bool Feature::GetSample(const char* infile, const char* samplefile){
@@ -99,6 +112,7 @@ namespace classfy{
 	int Feature::Categorizate(std::string& str){
 		std::vector<std::string> vec;
 		f._Split(" ", str , vec);
+		//commom::DEBUG_INFO(f.ConvertToStr(vec.size()));
 		int classtype =  0;		
 		float value_first = 2, value_second = 1, value_third = 0, alpha = 0.1;
 		if( vec.size() >= 30 ){
@@ -116,6 +130,7 @@ namespace classfy{
 		else{
 			classtype =dict.Classfy(str, value_third);
 		}
+		//std::cout<<classtype<<std::endl;
 		return classtype;
 	}
 }
