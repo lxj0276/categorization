@@ -11,6 +11,7 @@ class DictClassfy{
 		std::vector<std::map<std::string, float> >worddict;		
 	public:
 		DictClassfy();
+		DictClassfy(int n, const char* path);
 		~DictClassfy();
 		int Classfy(std::string& str, int value);
 		bool LoadDict(int x, const char* dictdir);		

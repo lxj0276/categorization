@@ -3,6 +3,9 @@ namespace classfy{
 	DictClassfy::DictClassfy(){
 		typenum = 0;
 	}
+	DictClassfy::DictClassfy(int n, const char* path){
+		LoadDict(n,path);
+	}
 	DictClassfy::~DictClassfy(){
 		worddict.clear();
 	}
@@ -31,7 +34,11 @@ namespace classfy{
 			fclose(fi);	 
 		}
 		std::string path =std::string( dictdir)+"dict.list";
+		commom::DEBUG_INFO(path);
 		FILE *fi = fopen(path.c_str(),"r");
+		if( fi == NULL){
+			commom::DEBUG_INFO("open file error");
+		}
 		char buffer[MAX_LENTH];	
 		while ( f.ReadLine(buffer,MAX_LENTH,fi)!=NULL){
 			std::string str = f.GetLine(buffer);
@@ -39,17 +46,22 @@ namespace classfy{
 			if( vec.size() == 2 )	tagdict[atoi(vec.at(0).c_str())] = vec.at(1);
 		}
 		fclose(fi);	
+		commom::DEBUG_INFO(f.ConvertToStr(tagdict.size()));
 		return true;
 	}
 
 	/*¥ µ‰∆•≈‰∑÷¿‡*/
 	int DictClassfy::Classfy(std::string& str, int value){
+		commom::DEBUG_INFO(str);
 		float* score = new float[typenum];
 		memset( score,0,sizeof(float)*typenum );
 		std::vector<std::string> words; 	
 		f._Split(" ", str , words);
+		commom::DEBUG_INFO(f.ConvertToStr(words.size()));
+		commom::DEBUG_INFO(f.ConvertToStr(typenum));
 		for(int i = 0;  i< typenum;  i++){		
 			for(int j =0;  j< words.size();  j++){
+				commom::DEBUG_INFO(f.ConvertToStr(worddict[i].size()));
 				if( worddict[i].find(words.at(j)) !=  worddict[i].end() ) {
 					score[i] += worddict[i][words.at(j)];
 				}
@@ -58,7 +70,7 @@ namespace classfy{
 		score[6] /=2.5;
 		int maxindex = f.MaxArray(score,typenum) + 1;
 		int maxscore = score[maxindex-1];
-		//std::cout<<maxindex<<"  "<<maxscore<<"   "<<value<<"  "<<std::endl;
+		std::cout<<maxindex<<"  "<<maxscore<<"   "<<value<<"  "<<std::endl;
 		if(maxindex == 7){
 			score[maxindex-1] = 0;
 			int secondindex = f.MaxArray(score,typenum) + 1;
