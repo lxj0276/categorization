@@ -56,7 +56,6 @@ static PyMethodDef textclassfyMethods[] ={
 };
 
 extern "C"   {
-
 	void inittextclassfy(){
 		PyObject* m;
 		m = Py_InitModule("textclassfy", textclassfyMethods);

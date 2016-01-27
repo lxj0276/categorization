@@ -15,6 +15,7 @@ class DictClassfy{
 		~DictClassfy();
 		int Classfy(std::string& str, int value);
 		bool LoadDict(int x, const char* dictdir);		
+		std::string Categorizate(std::string& str);
 };
 
 class Feature{

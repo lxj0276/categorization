@@ -9,7 +9,6 @@ namespace classfy{
 	DictClassfy::~DictClassfy(){
 		worddict.clear();
 	}
-
 	/*º”‘ÿπÿº¸¥ ¥ µ‰*/
 	bool DictClassfy::LoadDict(int x, const char* dictdir){
 		typenum = x;
@@ -29,12 +28,11 @@ namespace classfy{
 				else if( vec.size() == 2 )	p[vec.at(0)] = atof(vec.at(1).c_str());
 				else 	p[vec.at(0)] = 1;
 			}
-			commom::DEBUG_INFO(f.ConvertToStr(p.size()));
 			worddict.push_back(p);
 			fclose(fi);	 
 		}
 		std::string path =std::string( dictdir)+"dict.list";
-		commom::DEBUG_INFO(path);
+		//commom::DEBUG_INFO(path);
 		FILE *fi = fopen(path.c_str(),"r");
 		if( fi == NULL){
 			commom::DEBUG_INFO("open file error");
@@ -46,22 +44,17 @@ namespace classfy{
 			if( vec.size() == 2 )	tagdict[atoi(vec.at(0).c_str())] = vec.at(1);
 		}
 		fclose(fi);	
-		commom::DEBUG_INFO(f.ConvertToStr(tagdict.size()));
 		return true;
 	}
 
 	/*¥ µ‰∆•≈‰∑÷¿‡*/
 	int DictClassfy::Classfy(std::string& str, int value){
-		commom::DEBUG_INFO(str);
 		float* score = new float[typenum];
 		memset( score,0,sizeof(float)*typenum );
 		std::vector<std::string> words; 	
 		f._Split(" ", str , words);
-		commom::DEBUG_INFO(f.ConvertToStr(words.size()));
-		commom::DEBUG_INFO(f.ConvertToStr(typenum));
 		for(int i = 0;  i< typenum;  i++){		
 			for(int j =0;  j< words.size();  j++){
-				commom::DEBUG_INFO(f.ConvertToStr(worddict[i].size()));
 				if( worddict[i].find(words.at(j)) !=  worddict[i].end() ) {
 					score[i] += worddict[i][words.at(j)];
 				}
@@ -80,6 +73,32 @@ namespace classfy{
 		if( maxscore <= value )	return 0;
 		else	return maxindex;
 	}
+
+
+	std::string DictClassfy::Categorizate(std::string& str){
+		std::vector<std::string> vec;
+		f._Split(" ", str , vec);
+		int classtype =  0;		
+		float value_first = 2, value_second = 1, value_third = 0, alpha = 0.1;
+		if( vec.size() >= 30 ){
+			classtype =Classfy(str, value_first);
+		}
+		else if(vec.size() >= 15){
+			classtype =Classfy(str, value_first);
+			if( classtype == 0 ){
+				classtype =Classfy(str, value_second);
+			}
+		}
+		else if(vec.size() >=5){
+			classtype =Classfy(str, value_second);
+		}
+		else{
+			classtype =Classfy(str, value_third);
+		}
+		return tagdict[classtype];
+	}
+
+
 
 
 
@@ -145,4 +164,5 @@ namespace classfy{
 		//std::cout<<classtype<<std::endl;
 		return classtype;
 	}
+
 }
