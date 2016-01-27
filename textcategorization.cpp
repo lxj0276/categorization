@@ -70,8 +70,12 @@ namespace classfy{
 			int secondscore = score[secondindex-1];
 			if((secondscore > value +1)&&(maxscore < 3*secondscore)) return secondindex;
 		}
+		commom::DEBUG_INFO(f.ConvertToStr(maxscore));
 		if( maxscore <= value )	return 0;
-		else	return maxindex;
+		else	{
+			commom::DEBUG_INFO(f.ConvertToStr(maxindex));
+			return maxindex;
+		}
 	}
 
 
@@ -95,6 +99,8 @@ namespace classfy{
 		else{
 			classtype =Classfy(str, value_third);
 		}
+		commom::DEBUG_INFO("type");
+		commom::DEBUG_INFO(f.ConvertToStr(classtype));
 		return tagdict[classtype];
 	}
 
