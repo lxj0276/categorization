@@ -3,7 +3,7 @@
 #include "../wordseg/seg.h"
 #include "textcategorization.h"
 commom::Func f;
-classfy::DictClassfy dict(4,"./dict/classfication/typelist/");
+classfy::DictClassfy dict(4,"../dict/classfication/typelist/");
 seg::Wordseg mseg;
 std::string Categorizate(const char* s){
 	std::string str = s;

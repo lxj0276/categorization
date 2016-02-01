@@ -158,7 +158,7 @@ namespace classfy{
 	}
 
 	bool DictClassfy::_Classfy(std::string& str, float value, int& type){
-		float* score = new float[typenum];
+		int* score = new int[typenum];
 		memset( score,0,sizeof(float)*typenum );
 		std::vector<std::string> words; 	
 		f._Split(" ", str , words);
@@ -200,18 +200,8 @@ namespace classfy{
 				score[1] = 0;
 			}
 			int maxindex = f.MaxArray(score,typenum) + 1;
-			int maxscore = score[maxindex-1];
-			score[2] /=2.5;
-			if(maxindex == 3){
-				//commom::DEBUG_INFO(f.ConvertToStr(maxscore));
-				score[maxindex-1] = 0;
-				int secondindex = f.MaxArray(score,typenum) + 1;
-				int secondscore = score[secondindex-1];
-				if((secondscore > value +1)&&(maxscore < 3*secondscore)){
-					type = secondindex;
-					return true;
-				}
-			}
+			score[2] /=3;
+			int maxscore = score[maxindex-1];			
 			if( maxscore <= value)	{
 				type = 0;
 				return true;
